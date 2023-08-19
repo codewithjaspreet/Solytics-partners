@@ -18,12 +18,15 @@ chrome_options.add_argument("--start-maximized")  # Maximize the browser window
 driver = webdriver.Chrome( options=chrome_options)
 
 
-#targeted individiuals data --- 
-# -- rest can depend upon the requirement
+#targeted 1,2,3rd table --- 
+# -- rest can depend upon the requirement how this data has to be presented in any file
+# output can be viewed in console 
+
 def extract():
     
 
     my_data = [];
+    other_data = [];
 
 
     try:
@@ -37,12 +40,32 @@ def extract():
 
         data = wait.until(EC.presence_of_all_elements_located((By.XPATH, "//td[@class='sProvP1']")))
 
+        other_data = wait.until(EC.presence_of_all_elements_located((By.XPATH, "//td[@class='def']")))
+
         for i in data:
 
              print(i.text)
+
+             print("\n")
+
+             
+
              my_data.append(i.text)
 
-        return my_data
+
+        print("-----------")
+        print("-----------")
+        
+        for i in other_data:
+
+             print(i.text)
+             print("\n")
+             
+
+             other_data.append(i.text)
+
+
+        make_dataframe(my_data, other_data)
 
  
             
@@ -61,21 +84,21 @@ def extract():
 
 
 
-def make_dataframe(l1 ):
+def make_dataframe(l1,l2):
 
     
-    rows = zip(l1)
+    data = {'Column1': l1, 'Column2': l2}
 
-    with open('data.csv', mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(['data_extracted'])  
-        writer.writerows(rows)
+    df = pd.DataFrame(data)
 
+    csv_filename = 'data.csv'
+    df.to_csv(csv_filename, index=False)
+
+    print("DataFrame saved to CSV:", csv_filename)
 
 
 if __name__ == "__main__":
 
-    l1 = extract()
-    make_dataframe(l1)
+    extract()
     while True:
         pass    
