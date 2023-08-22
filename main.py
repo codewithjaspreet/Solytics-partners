@@ -13,20 +13,16 @@ from selenium.webdriver.support import expected_conditions as EC
 chromedriver_path = "/Users/jaspreetSinghSodhi/downloads/chromedriver"
 
 chrome_options = Options()
-chrome_options.add_argument("--start-maximized")  # Maximize the browser window
+chrome_options.add_argument("--start-maximized") 
 
 driver = webdriver.Chrome( options=chrome_options)
 
 
-#targeted 1,2,3rd table --- 
-# -- rest can depend upon the requirement how this data has to be presented in any file
-# output can be viewed in console 
 
 def extract():
     
 
-    my_data = [];
-    other_data = [];
+  
 
 
     try:
@@ -38,67 +34,62 @@ def extract():
 
         wait  =    WebDriverWait(driver, 5)
 
-        data = wait.until(EC.presence_of_all_elements_located((By.XPATH, "//td[@class='sProvP1']")))
+        #  //td[@class ="sHdr"]
+        # //td[@class ="SbodyRefs"]
+        # //td[@class ="scHdr"]
 
-        other_data = wait.until(EC.presence_of_all_elements_located((By.XPATH, "//td[@class='def']")))
+        # //td[@class ="tailSTxt"]
 
-        for i in data:
+        f_title = wait.until(EC.presence_of_element_located((By.XPATH, "//td[@class='sHdr']")))
 
-             print(i.text)
+        s_title = wait.until(EC.presence_of_element_located((By.XPATH, "//td[@class='SbodyRefs']")))
 
-             print("\n")
-
-             
-
-             my_data.append(i.text)
+        header =   wait.until(EC.presence_of_element_located((By.XPATH, "//td[@class='scHdr']")))
 
 
-        print("-----------")
-        print("-----------")
+        tables = wait.until(EC.presence_of_all_elements_located((By.XPATH, "//td[@class='tailSTxt']")))
+
         
-        for i in other_data:
-
-             print(i.text)
-             print("\n")
-             
-
-             other_data.append(i.text)
+        print("-----------")
+        print(f_title.text)
+        print("-----------")
 
 
-        make_dataframe(my_data, other_data)
-
- 
-            
-
+        print("-----------")
+        print(s_title.text)
+        print("-----------")
 
 
+        print("-----------")
+        print(header.text)
+        print("-----------")
+
+
+        print("-----------")
+
+        for i in tables:
+                
+                 print(i.text)
+    
+                 print("\n")
+    
+                 
+    
+
+        print("-----------")
+
+
+     
 
     except Exception as e:
         print(f"An error occurred: {e}")
 
     finally:
-        # Close the browser after the task is completed
-       while True:
-           pass
-        #driver.close()
-
-
-
-def make_dataframe(l1,l2):
-
-    
-    data = {'Column1': l1, 'Column2': l2}
-
-    df = pd.DataFrame(data)
-
-    csv_filename = 'data.csv'
-    df.to_csv(csv_filename, index=False)
-
-    print("DataFrame saved to CSV:", csv_filename)
+        
+        driver.close()
 
 
 if __name__ == "__main__":
 
     extract()
-    while True:
-        pass    
+      
